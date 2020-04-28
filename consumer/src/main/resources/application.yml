@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: consumer
+
+server:
+  port: 8000
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: true
+    service-url:
+      defaultZone: http://knys:knys@node1:8761/eureka/,http://knys:knys@node2:8762/eureka/,http://knys:knys@node3:8763/eureka/
+
+ribbon:
+  ReadTimeout: 1200
+  ConnectTimeout: 1000
+  MaxAutoRetries: 0
+  eager-load:
+    enabled: true
+    clients: provider
+  http:
+    client:
+      enabled: true
+
+#provider:
+#  ribbon:
+#    connectTimeout: 1000
+#    readTimeount: 1000
+#    NFLoadBalancerRuleClassName: com.cnknys.rule.MyRule
+
+
+logging:
+  level:
+    com.cnknys.api.UserRemoteClient:
+      DEBUG
+feign:
+  client:
+    config:
+      provider:
+        connectTimeout: 1000
+        readTimeout: 2000
+        loggerLevel: FULL
+  compression:
+    request:
+      enabled: true
+      mime-types: text/xml,application/xml,application/json
+      min-request-size: 2048
+    response:
+      enabled: true

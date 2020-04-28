@@ -1,0 +1,12 @@
+server:
+  port: 9001
+
+
+eureka:
+    instance:
+#      prefer-ip-address: true
+      instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+      lease-renewal-interval-in-seconds: 5
+      lease-expiration-duration-in-seconds: 5
+      metadata-map:
+        provider-name: one
