@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cnknys</groupId>
-    <artifactId>spring-boot-parent</artifactId>
+    <groupId>sb-cloud</groupId>
+    <artifactId>sb-cloud-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
