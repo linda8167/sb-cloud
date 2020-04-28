@@ -1,7 +1,7 @@
 package com.sbcloud;
 
 import com.sbcloud.api.UserRemoteClient;
-import com.sbcloud.api.domain.User;
+import com.sbcloud.domain.User;
 import com.netflix.discovery.EurekaClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,8 +20,6 @@ import java.util.List;
 
 /**
  * @author 庞飞
- * @date: 2020/4/27 11:13
- * @description TODO
  */
 @RestController
 public class EchoController {

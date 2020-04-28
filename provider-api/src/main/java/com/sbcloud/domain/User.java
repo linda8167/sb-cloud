@@ -1,4 +1,4 @@
-package com.sbcloud.api.domain;
+package com.sbcloud.domain;
 
 import lombok.Builder;
 import lombok.Data;

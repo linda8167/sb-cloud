@@ -1,7 +1,7 @@
 package com.sbcloud.app;
 
 import com.sbcloud.api.UserRemoteClient;
-import com.sbcloud.api.domain.User;
+import com.sbcloud.domain.User;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
