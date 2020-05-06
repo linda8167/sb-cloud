@@ -14,8 +14,8 @@ eureka:
     enable-self-preservation: false
     eviction-interval-timer-in-ms: 5000
   client:
-#    register-with-eureka: false
-#    fetch-registry: false
+    register-with-eureka: false
+    fetch-registry: false
   instance:
-#    prefer-ip-address: true
+    prefer-ip-address: true
     instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}

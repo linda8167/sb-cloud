@@ -12,13 +12,18 @@ eureka:
         enabled: true
       service-url:
         defaultZone:
-          http://knys:knys@node2:8762/eureka/,http://knys:knys@node1:8761/eureka/,http://knys:knys@node3:8763/eureka/
+          http://knys:knys@register:8761/eureka/
     instance:
-      hostname: node3
+      prefer-ip-address: true
       metadata-map:
         company: knys
 
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
 
 knys:
   user:

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @date: 2020/4/28 12:43
  * @description TODO
  */
-@FeignClient(value = "provider")
+@FeignClient(value = "provider", fallbackFactory = UserRemoteClientFallbackFactory.class)
 public interface UserRemoteClient {
 
     @PostMapping("/user/add")

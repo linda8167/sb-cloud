@@ -7,14 +7,17 @@ server:
 
 eureka:
   client:
-    register-with-eureka: false
+    register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://knys:knys@node1:8761/eureka/,http://knys:knys@node2:8762/eureka/,http://knys:knys@node3:8763/eureka/
+      defaultZone: http://knys:knys@register:8761/eureka/
+      #defaultZone: http://knys:knys@node1:8761/eureka/,http://knys:knys@node2:8762/eureka/,http://knys:knys@node3:8763/eureka/
 
 ribbon:
   ReadTimeout: 1200
   ConnectTimeout: 1000
+  OkToRetryOnAllOperations: false
+  MaxAutoRetriesNextServer: 0
   MaxAutoRetries: 0
   eager-load:
     enabled: true
@@ -35,11 +38,13 @@ logging:
     com.cnknys.api.UserRemoteClient:
       DEBUG
 feign:
+  hystrix:
+    enabled: true
   client:
     config:
       provider:
         connectTimeout: 1000
-        readTimeout: 2000
+        readTimeout: 4000
         loggerLevel: FULL
   compression:
     request:
@@ -48,3 +53,21 @@ feign:
       min-request-size: 2048
     response:
       enabled: true
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+
+turbine:
+  appConfig: consumer
+  instanceUrlSuffix: actuator/hystrix.stream
+  clusterNameExpression: "'default'"

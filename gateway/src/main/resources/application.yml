@@ -1,0 +1,55 @@
+server:
+  port: 8001
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://knys:knys@register:8761/eureka/
+
+spring:
+  application:
+    name: gateway
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+    database: 0
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # enabled: true
+          lowerCaseServiceId: true
+      routes:
+      - id: provider
+        uri: lb://provider
+        predicates:
+          - Path=/provider/**
+        filters:
+          - StripPrefix=1
+          - name: RequestRateLimiter
+            args:
+              redis-rate-limiter.replenishRate: 10
+              redis-rate-limiter.burstCapacity: 20
+              key-resolver: "#{@ipKeyResolver}"
+          - name: Retry
+            args:
+              retries: 3
+              series: SERVER_ERROR
+      - id: consumer
+        uri: lb://consumer
+        predicates:
+          - Path=/consumer/**
+        filters:
+          - StripPrefix=1
+          - name: RequestRateLimiter
+            args:
+              redis-rate-limiter.replenishRate: 10
+              redis-rate-limiter.burstCapacity: 20
+              key-resolver: "#{@ipKeyResolver}"
+          - name: Retry
+            args:
+              retries: 3
+              series: SERVER_ERROR
