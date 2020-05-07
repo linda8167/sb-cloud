@@ -3,6 +3,7 @@ import com.netflix.hystrix.strategy.concurrency.HystrixConcurrencyStrategyDefaul
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -43,7 +44,7 @@ public class HystrixTest {
             // MyHystrixCommand.flushCache("zhangsan");
         });
         for (Future f : list) {
-           f.get();
+            f.get();
         }
         context.shutdown();
         //IntStream.rangeClosed(1, 20).parallel().forEach(i -> {
@@ -54,6 +55,18 @@ public class HystrixTest {
         //    });
         //});
 
+        context = HystrixRequestContext.initializeContext();
+        Future<String> f1 = new MyHystrixCollapser("zhangsan").queue();
+
+        Thread.sleep(3000);
+
+        Future<String> f2 = new MyHystrixCollapser("zhangsan123").queue();
+        Thread.sleep(1000);
+
+        Future<String> f3 = new MyHystrixCollapser("zhangsan1234").queue();
+        Future<String> f4 = new MyHystrixCollapser("zhangsan12345").queue();
+        System.out.println(f1.get() + "=" + f2.get() + f3.get() + f4.get());
+        context.shutdown();
 
     }
 
@@ -96,5 +109,55 @@ public class HystrixTest {
         protected String getFallback() {
             return Thread.currentThread().getName() + "失败了";
         }
+    }
+
+
+    static class MyHystrixCollapser extends HystrixCollapser<List<String>, String, String> {
+
+        private final String name;
+
+        public MyHystrixCollapser(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getRequestArgument() {
+            return name;
+        }
+
+        @Override
+        protected HystrixCommand<List<String>> createCommand(Collection<CollapsedRequest<String, String>> requests) {
+            return new BatchCommand(requests);
+        }
+
+        @Override
+        protected void mapResponseToRequests(List<String> response, Collection<CollapsedRequest<String, String>> requests) {
+            int count = 0;
+
+            for (CollapsedRequest<String, String> request : requests) {
+                request.setResponse(response.get(count++));
+            }
+        }
+
+        private static final class BatchCommand extends HystrixCommand<List<String>> {
+
+            private final Collection<CollapsedRequest<String, String>> requests;
+
+            public BatchCommand(Collection<CollapsedRequest<String, String>> requests) {
+                super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup")).andCommandKey(HystrixCommandKey.Factory.asKey("GetValueForKey")));
+                this.requests = requests;
+            }
+
+            @Override
+            protected List<String> run() throws Exception {
+                System.out.println("真正执行请求......");
+                List<String> response = new ArrayList<>();
+                for (CollapsedRequest<String, String> request : requests) {
+                    response.add("返回结果" + request.getArgument());
+                }
+                return response;
+            }
+        }
+
     }
 }
