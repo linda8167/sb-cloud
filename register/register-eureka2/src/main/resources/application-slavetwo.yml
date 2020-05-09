@@ -1,0 +1,9 @@
+server:
+  port: 8763
+
+eureka:
+  instance:
+    hostname: node3
+  client:
+    service-url:
+      defaultZone: http://knys:knys@node1:8761/eureka,http://knys:knys@node2:8762/eureka

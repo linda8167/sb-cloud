@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.DefaultErrorWebExceptionHandler;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.server.*;
 
 import java.util.HashMap;
@@ -42,11 +41,17 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
 	 *
 	 * @param errorAttributes
 	 */
+	//@Override
+	//protected HttpStatus getHttpStatus(Map<String, Object> errorAttributes) {
+	//	int statusCode = (int) errorAttributes.get("code");
+	//	return HttpStatus.valueOf(statusCode);
+	//}
+
 	@Override
-	protected HttpStatus getHttpStatus(Map<String, Object> errorAttributes) {
-		int statusCode = (int) errorAttributes.get("code");
-		return HttpStatus.valueOf(statusCode);
+	protected int getHttpStatus(Map<String, Object> errorAttributes) {
+		return super.getHttpStatus(errorAttributes);
 	}
+
 	/**
 	 * 构建异常信息
 	 *

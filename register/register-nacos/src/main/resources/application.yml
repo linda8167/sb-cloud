@@ -1,0 +1,17 @@
+server:
+  port: 8080
+spring:
+#  security:
+#    user:
+#      name: knys
+#      password: knys
+#  profiles:
+#    active: master
+logging:
+  level:
+    com.alibaba:
+      debug
+
+
+useLocalCache: false
+# C:\Windows\System32\drivers\etc 添加主机名
