@@ -16,7 +16,6 @@
         <module>order-service-api</module>
         <module>user-service</module>
         <module>user-service-api</module>
-        <module>demo-service</module>
     </modules>
 
     <dependencies>

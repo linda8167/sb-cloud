@@ -1,55 +1,59 @@
 server:
-  port: 8001
+  port: 9000
 
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://knys:knys@register:8761/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 
 spring:
   application:
     name: gateway
   redis:
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
-    password: ${REDIS_PASSWORD}
+    host: 127.0.0.1
+    port: 6379
+    password: pangfei
     database: 0
   cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
     gateway:
       discovery:
         locator:
-          # enabled: true
+          enabled: true
           lowerCaseServiceId: true
+          filters:
+            - StripPrefix=1
       routes:
-      - id: provider
-        uri: lb://provider
+      - id: order-service
+        uri: lb://order-service
         predicates:
-          - Path=/provider/**
+          - Path=/order-service/**
         filters:
           - StripPrefix=1
-          - name: RequestRateLimiter
-            args:
-              redis-rate-limiter.replenishRate: 10
-              redis-rate-limiter.burstCapacity: 20
-              key-resolver: "#{@ipKeyResolver}"
-          - name: Retry
-            args:
-              retries: 3
-              series: SERVER_ERROR
-      - id: consumer
-        uri: lb://consumer
-        predicates:
-          - Path=/consumer/**
-        filters:
-          - StripPrefix=1
-          - name: RequestRateLimiter
-            args:
-              redis-rate-limiter.replenishRate: 10
-              redis-rate-limiter.burstCapacity: 20
-              key-resolver: "#{@ipKeyResolver}"
-          - name: Retry
-            args:
-              retries: 3
-              series: SERVER_ERROR
+#          - name: RequestRateLimiter
+#            args:
+#              redis-rate-limiter.replenishRate: 10
+#              redis-rate-limiter.burstCapacity: 20
+#              key-resolver: "#{@ipKeyResolver}"
+#          - name: Retry
+#            args:
+#              retries: 3
+#              series: SERVER_ERROR
+#      - id: consumer
+#        uri: lb://consumer
+#        predicates:
+#          - Path=/consumer/**
+#        filters:
+#          - StripPrefix=1
+#          - name: RequestRateLimiter
+#            args:
+#              redis-rate-limiter.replenishRate: 10
+#              redis-rate-limiter.burstCapacity: 20
+#              key-resolver: "#{@ipKeyResolver}"
+#          - name: Retry
+#            args:
+#              retries: 3
+#              series: SERVER_ERROR
