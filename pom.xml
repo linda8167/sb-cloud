@@ -18,7 +18,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
         <docker.image.prefix>sb-cloud</docker.image.prefix>
-        <docker.host>http://192.168.56.104:2375</docker.host>
+<!--        <docker.host>http://192.168.56.104:2375</docker.host>-->
+        <docker.host>http://192.168.1.126:2375</docker.host>
     </properties>
     <modules>
         <module>register</module>

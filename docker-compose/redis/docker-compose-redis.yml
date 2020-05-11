@@ -1,0 +1,35 @@
+version: '3'
+services:
+  redis-master:
+    image: redis
+    container_name: redis-master
+    restart: always
+    command: redis-server
+    volumes:
+      - ./data/redis-master:/data
+    ports:
+      - "6379:6379"
+    sysctls:
+      - net.core.somaxconn=1024
+  redis-slave1:
+    image: redis
+    container_name: redis-slave1
+    restart: always
+    command: redis-server --slaveof redis-master 6379
+    volumes:
+      - ./data/redis-slave1:/data
+    ports:
+      - "6380:6379"
+    sysctls:
+      - net.core.somaxconn=1024
+  redis-slave2:
+    image: redis
+    container_name: redis-slave2
+    restart: always
+    command: redis-server --slaveof redis-master 6379
+    volumes:
+      - ./data/redis-slave2:/data
+    ports:
+      - "6381:6379"
+    sysctls:
+      - net.core.somaxconn=1024

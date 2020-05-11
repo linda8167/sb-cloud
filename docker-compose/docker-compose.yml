@@ -1,0 +1,27 @@
+version: '3'
+services:
+  redis-master:
+    image: redis
+    container_name: redis-master
+    restart: always
+    volumes:
+      - ../data/redis-master:/data
+    ports:
+      - "6379:6379"
+  redis-slave1:
+    image: redis
+    container_name: redis-master
+    restart: always
+    command: redis-server --slaveof  redis-master 6379
+    volumes:
+      - ../data/redis-master:/data
+    ports:
+      - "6379:6379"
+  redis-slave2:
+    image: redis
+    container_name: redis-master
+    restart: always
+    volumes:
+      - ../data/redis-master:/data
+    ports:
+      - "6379:6379"

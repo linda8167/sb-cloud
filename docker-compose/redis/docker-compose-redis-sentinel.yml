@@ -1,0 +1,35 @@
+version: '3'
+services:
+  redis-sentinel1:
+    image: redis
+    container_name: redis-sentinel1
+    restart: always
+    command: redis-sentinel /usr/local/etc/redis/sentinel1.conf
+    volumes:
+      - ./config/sentinel1.conf:/usr/local/etc/redis/sentinel1.conf
+    ports:
+      - "26379:26379"
+    sysctls:
+      - net.core.somaxconn=1024
+  redis-sentinel2:
+    image: redis
+    container_name: redis-sentinel2
+    restart: always
+    command: redis-sentinel /usr/local/etc/redis/sentinel2.conf
+    volumes:
+      - ./config/sentinel2.conf:/usr/local/etc/redis/sentinel2.conf
+    ports:
+      - "26380:26379"
+    sysctls:
+      - net.core.somaxconn=1024
+  redis-sentinel3:
+    image: redis
+    container_name: redis-sentinel3
+    restart: always
+    command: redis-sentinel /usr/local/etc/redis/sentinel3.conf
+    volumes:
+      - ./config/sentinel3.conf:/usr/local/etc/redis/sentinel3.conf
+    ports:
+      - "26381:26379"
+    sysctls:
+      - net.core.somaxconn=1024
